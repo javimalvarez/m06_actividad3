@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="estilos.css">
+    <title>Actividad 3</title>
+</head>
+
+<body onload="mostrarPlatos(),mostrarMenus(),bienvenida()">
+    <header>
+        <div class="contenedor1">
+            <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/e/e5/GrabFood_Logo%28White%29.png"
+                alt="logo" title="logo">
+        </div>
+        <nav class="barraMenu">
+            <ul>
+                <li><button class="menuButton" type="button" id="consultarPlatos">Consulta platos</button></li>
+                <li><button class="menuButton" type="button" id="consultarMenus">Consulta menús</button></li>
+                <li><button class="menuButton" type="button" id="borrarPantalla">Borrar datos</button></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <div class="plato">
+            <h1 class="title">Platos disponibles:</h1>
+            <span id="platos"></span>
+        </div>
+        <div class="menu">
+            <h1 class="title">Menús disponibles:</h1>
+            <span id="menus"></span>
+        </div>
+        <form>
+            <fieldset class="formulario">
+                <legend>
+                    <h2>Gestión restaurante Linkia</h2>
+                </legend>
+                <fieldset>
+                    <legend>Añadir platos</legend>
+                    <label for="nombre">Nombre del plato:</label>
+                    <input type="text" id="nombre" name="nombre">
+                    <label for="descripcion">Descripción del plato:</label>
+                    <input type="text" id="descripcion" name="descripcion">
+                    <label for="precio">Precio del plato:</label>
+                    <input type="number" id="precio" name="precio" step="0.01">
+                    <button type="button" id="btnAgregarPlato">AÑADIR PLATO</button>
+                </fieldset><br><br>
+                <fieldset>
+                    <legend>Borrar platos</legend>
+                    <select id="selectPlatos">
+                        <option value="">Seleccionar un plato</option>
+                        <option value="plato1">Hamburguesa</option>
+                        <option value="plato2">Pizza Chicago</option>
+                    </select>
+                    <button type="button" id="btnEliminar">BORRAR
+                        PLATO</button>
+                </fieldset><br><br>
+                <fieldset>
+                    <legend>Añadir platos</legend>
+                    <label for="nombreMenu">Nombre del Menu:</label>
+                    <input type="text" id="nombreMenu" name="nombreMenu">
+                    <button type="button" id="btnAgregarMenu">AÑADIR MENU</button>
+                </fieldset><br><br>
+                <fieldset>
+                    <legend>Configurar menús</legend>
+                    <select id="listaPlatos">
+                        <option value="">Seleccionar un plato</option>
+                        <option value="plato1">Hamburguesa</option>
+                        <option value="plato2">Pizza Chicago</option>
+                    </select>
+                    <select id="listaMenus">
+                        <option value="">Seleccionar un menú</option>
+                        <option value="menu1">Menu Especial</option>
+                    </select>
+                    <button type="button" id="btnAgregarPlatoMenu">AÑADIR PLATO EN MENU</button>
+                </fieldset>
+            </fieldset>
+        </form>
+    </main>
+    <footer>
+        <div>
+            Desarrollo de Aplicaciones Web | Linkia FP<br>
+            Noviembre 2023 - Francisco Javier Martínez
+        </div>
+    </footer>
+</body>
+<script src="actividad_restaurante.js"></script>
+
+</html>
