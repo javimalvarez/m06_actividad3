@@ -25,7 +25,7 @@ class Plato {
 const plato1 = new Plato("Hamburguesa", "Deliciosa hamburguesa con carne jugosa y queso derretido", 10);
 /*Se aplica la función getHTML para mostrar en cosola la información 
 que visualiza en el usuario en el documento HTML*/
-console.log(plato1.getHTML());
+//console.log(plato1.getHTML());
 
 //Objeto tipo Menu
 class Menu {
@@ -79,17 +79,21 @@ platosDisponibles.push(plato1, plato2);
 function mostrarPlatos() {
     //Variable infoPlatos va almacenar la información recuperada desde listaPlatos
     let infoPlatos = "";
-    //Se recorre el array platosDisponibles para recuperar todos los objetos Plato
+    //Se recorre el array platosDisponibles para recuperar todos los objetos Plato y se añaden a los elementos select del formulario
+    document.getElementById("selectPlatos").innerHTML = '<option value="">Seleccionar un plato</option>';
+    document.getElementById("listaPlatos").innerHTML = '<option value="">Seleccionar un plato</option>';
     for (let i = 0; i < platosDisponibles.length; i++) {
         //Aplicamos getHTML al objeto Plato para poder mostrar la información en pantalla
         let plato = platosDisponibles[i].getHTML() + "<br>";
-        document.getElementById("listaPlatos").innerHTML += "<option value=" + i + ">" + platosDisponibles[i].nombre + "</option>"
+        //Se añaden  los platos disponibles en ambos select
+        document.getElementById("selectPlatos").innerHTML += "<option value=" + i + ">" + platosDisponibles[i].nombre + "</option>";
+        document.getElementById("listaPlatos").innerHTML += "<option value=" + i + ">" + platosDisponibles[i].nombre + "</option>";
         //Con cada iteración se añade la información de los platos recuperador a infoPlatos
         infoPlatos += plato;
     }
     /*Variable que contiene información del elemento en el documento HTML 
     donde se va a mostrar la información de los platos*/
-    let contenedor = document.getElementById("platos");
+    const contenedor = document.getElementById("platos");
     //Borra la información del elemento HTML seleccionado en caso de que exista información
     contenedor.innerHTML = "";
     //Muestra por pantalla al usuario la información almacenada en infoPlatos
@@ -102,13 +106,17 @@ menusDisponibles["menu1"] = menu1;
 //Muestra la información de los distintos menús almacenados en menusDisponibles
 function mostrarMenus() {
     let infoMenus = "";
+    //Elimina la información del select listaMenus
+    document.getElementById("listaMenus").innerHTML = '<option value="">Seleccionar un menú</option>';
     //Se recupera todos los menús del array menusDisponibles y se almacenan los datos en infoMenus
     for (let key in menusDisponibles) {
         infoMenus += menusDisponibles[key].getHTML() + "<br>";
+        //Se añade información desde el array menusDisponibles al select listaMenus
+        document.getElementById("listaMenus").innerHTML += "<option value=" + key + ">" + menusDisponibles[key].nombre + "</option>";
     }
     /*Variable que contiene información del elemento en el documento HTML 
     donde se va a mostrar la información de los menús*/
-    let contenedor = document.getElementById("menus");
+    const contenedor = document.getElementById("menus");
     //Borra la información del elemento HTML seleccionado en caso de que exista información
     contenedor.innerHTML = "";
     //Muestra por pantalla al usuario la información almacenada en infoMenus
@@ -123,79 +131,99 @@ function añadirPlatoLista() {
     const precio = document.getElementById("precio").value;
     //Se crea un objeto tipo Plato con los valores recuperados del formulario
     const nuevoPlato = new Plato(nombre, descripcion, precio);
-    //Se añade el nuevo objeto Plato a platosDisponibles
-    platosDisponibles.push(nuevoPlato);
-    alert("Se ha añadido " + nuevoPlato.nombre + " como nuevo plato disponible");
-    //Se añade información del nuevo plato al formulario incluido en el documento HTML
-    document.getElementById("selectPlatos").innerHTML += '<option value="nuevoPlato">' + nombre + '</option>';
-    document.getElementById("listaPlatos").innerHTML += '<option value="nuevoPlato">' + nombre + '</option>';
-    //Actualiza la información de los platos en pantalla al usuario
-    mostrarPlatos();
+    //Se solicita confirmación para cambiar configuración del array platosDisponibles
+    let respuesta = window.confirm("Confirma si deseas añadir el plato " + nombre + " a la lista de platos disponibles");
+    if (respuesta == true) {
+        //Se añade el nuevo objeto Plato a platosDisponibles
+        platosDisponibles.push(nuevoPlato);
+        alert("Se ha añadido " + nuevoPlato.nombre + " como nuevo plato disponible");
+        //Se añade información del nuevo plato al formulario incluido en el documento HTML
+        document.getElementById("selectPlatos").innerHTML += '<option value="nuevoPlato">' + nombre + '</option>';
+        document.getElementById("listaPlatos").innerHTML += '<option value="nuevoPlato">' + nombre + '</option>';
+        //Actualiza la información de los platos en pantalla al usuario
+        mostrarPlatos();
+    }
 }
 
 //Se configura botón btnAgregarPlato para añadir plato a lista de platos disponibles
-let agregar = document.getElementById("btnAgregarPlato");
-agregar.addEventListener("click", añadirPlatoLista);
+const añadirNuevoPlato = document.getElementById("btnAgregarPlato");
+añadirNuevoPlato.addEventListener("click", añadirPlatoLista);
 
 //Borra un objeto plato de platosDisponibles
 function borrarPlatoLista() {
-    let selectPlatos = document.getElementById("selectPlatos");
+    const selectPlatos = document.getElementById("selectPlatos");
     /*Recupera la posición del plato dentro del select
     se resta 1 a la posición recuparada porque tenemos
     un option no seleccionable*/
-    let posPlato = selectPlatos.selectedIndex - 1;
+    const posPlato = selectPlatos.selectedIndex - 1;
+    let respuesta = window.confirm("Confirma si deseas eliminar el plato " + platosDisponibles[posPlato].nombre);
     /*Se aplica la función splice a platosDisponibles para indicar la posición del elemento 
     y cuantos elementos queremos eliminar*/
-    platosDisponibles.splice(posPlato, 1);
-    //Actualiza la información de los platos en pantalla al usuario
+    if (respuesta == true) {
+        platosDisponibles.splice(posPlato, 1);
+    }
+    //Actualiza la información de los platos en pantalla al usuario\
     mostrarPlatos();
 }
 
 //Se configura botón btnEliminar para eliminar plato del array platosDisponibles
-let borrar = document.getElementById("btnEliminar");
-borrar.addEventListener("click", borrarPlatoLista);
+const borrarPlato = document.getElementById("btnEliminar");
+borrarPlato.addEventListener("click", borrarPlatoLista);
 
 //Añade un objeto tipo Menu a menusDisponibles
 function añadirMenu() {
     //Variable que almacena el nombre que ha incluido en el formulario el usuario para el menú
     let nombre = document.getElementById("nombreMenu").value;
-    alert("Se añade al inventario el menu " + nombre);
     //Se crea un nuevo objeto Menu con el nombre facilitado por el usuario
     const nuevoMenu = new Menu(nombre);
-    //Se añade el nuevo menú creado al array menusDisponibles
-    menusDisponibles["menuNuevo"] = nuevoMenu;
-    document.getElementById("menus").innerHTML = "";
-    //Añade el nuevo menú al select listaMenus 
-    document.getElementById("listaMenus").innerHTML += "<option value=" + nuevoMenu + ">" + nombre + "</option>";
-    //Actualiza la información de los menús en pantalla al usuario
-    mostrarMenus();
+    //Se pide confirmación al usuario para añadir un nuevo menú
+    let respuesta = window.confirm("Confirma que quieres añadir el menú " + nombre + " a la lista de menús disponibles");
+    if (respuesta == true) {
+        //Se añade el nuevo menú creado al array menusDisponibles
+        menusDisponibles["nuevoMenu"] = nuevoMenu;
+        alert("Añadido nuevo menú " + nombre + " a la lista de menús disponibles");
+        //Añade el nuevo menú al select listaMenus 
+        document.getElementById("listaMenus").innerHTML += '<option value="nuevoMenu">' + nombre + '</option>';
+        /*Se elimina información existente mostrada al usuario y 
+        se actualiza la información de los menús en pantalla al usuario*/
+        mostrarMenus();
+    }
 }
 
 //Se configura botón btnAgregarMenu para añadir menú
-let añadir = document.getElementById("btnAgregarMenu");
-añadir.addEventListener("click", añadirMenu);
+const añadirNuevoMenu = document.getElementById("btnAgregarMenu");
+añadirNuevoMenu.addEventListener("click", añadirMenu);
 
-function anadirPlatoMenu() {
+function añadirPlatoMenu() {
     //Variable que almacena el selector de platos
-    let listaPlatos = document.getElementById("listaPlatos");
-    let posPlato = listaPlatos.selectedIndex - 1;
-    let plato = platosDisponibles[posPlato];
-    console.log(plato);
+    const listaPlatos = document.getElementById("listaPlatos");
+    const posPlato = listaPlatos.selectedIndex - 1;
+    const plato = platosDisponibles[posPlato];
     //Variable que almacena el valor elegido en el select de la lista de menús
     const menuValue = document.getElementById("listaMenus").value;
-    menusDisponibles[menuValue].añadirPlato(plato);
-    alert("Se añadio el plato " + plato + " al menú " + menuValue);
-    mostrarMenus();
+    //Se solicita confirmación para cambiar la configuración del menú
+    let respuesta = window.confirm("Confirma si quieres añadir el plato " + plato.nombre + " al menú " + menusDisponibles[menuValue].nombre);
+    if (respuesta == true) {
+        //Se verifica si el plato está incluido o no dentro del menú, si no está incluido se añade al menú
+        if (!menusDisponibles[menuValue].listaPlatos.includes(plato, 0)) {
+            menusDisponibles[menuValue].añadirPlato(plato);
+            alert("Se ha añadido el plato " + plato.nombre + " al menú " + menusDisponibles[menuValue].nombre);
+            mostrarMenus();
+        }
+        else {
+            alert("El menú ya cuenta con el plato " + plato.nombre + ", elige otro plato para incluir en el menú");
+        }
+    }
 }
 
 //Se configura botón btnAgregarPlatoMenu para que añada un plato al menú seleccionado
-let añadirEnMenu = document.getElementById("btnAgregarPlatoMenu");
-añadirEnMenu.addEventListener("click", anadirPlatoMenu);
+const añadirEnMenu = document.getElementById("btnAgregarPlatoMenu");
+añadirEnMenu.addEventListener("click", añadirPlatoMenu);
 
 //Mensaje de bienvenida y acciones botones de la barra de menú
 function bienvenida() {
     let nombre = prompt('Estás accediendo al inventario, indica tu nombre: ');
-    alert("Hola " + nombre);
+    alert("Hola " + nombre + " estás accediendo al sistema de gestión de restaurantes Linkia FP");
 }
 function borrarPantalla() {
     document.getElementById("platos").innerHTML = "";
